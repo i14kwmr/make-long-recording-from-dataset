@@ -2,7 +2,7 @@
 データセットからメタ情報を使い，元の録音信号を作成する．
 
 ## Usage
-1. [本リポジトリ](git@github.com:i14kwmr/make-long-recording-from-dataset.git)をclone
+1. [本リポジトリ](https://github.com/i14kwmr/make-long-recording-from-dataset)をclone
 ```
 $ git clone git@github.com:i14kwmr/make-long-recording-from-dataset.git
 ```
