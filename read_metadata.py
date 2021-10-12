@@ -33,7 +33,7 @@ def get_list(filename_meta, filename_eval, filename_test=None):
     return list_meta, list_eval
 
 
-def concat_wav(fn_evals):
+def concat_wav(fn_evals, fn_out):
 
     total_sig = []
     for fn_eval in fn_evals:
@@ -42,7 +42,7 @@ def concat_wav(fn_evals):
         total_sig.append(sig)
 
     total_sig = np.concatenate(total_sig)
-    wavwrite("test.wav", total_sig, sr, subtype)
+    wavwrite(fn_out + ".wav", total_sig, sr, subtype)
 
 
 def read_metadata():
@@ -51,14 +51,27 @@ def read_metadata():
         "./meta/meta.txt", "./meta/evaluation_setup/evaluate.txt"
     )
 
-    fn = "a147"
-    mask = list_eval["fn_unk"].str.contains(fn)  # ファイルを抽出
-    list_eval["sec"] = [
-        int(fn_unk.split("_")[1]) for fn_unk in list_eval["fn_unk"]
-    ]  # start [s]
+    fn_list = [fn_unk.split("_")[0] for fn_unk in list_eval["fn_unk"]]
+    fn_list = list(set(fn_list))  # 重複した値の削除
 
-    print(list_eval[mask].sort_values("sec"))  # リスト
-    concat_wav(list_eval[mask].sort_values("sec")["fn_eval"])
+    for fn in fn_list:
+
+        # print(fn)
+        mask = list_eval["fn_unk"].str.contains(fn)  # 構成するファイルを抽出
+        list_eval["sec"] = [
+            int(fn_unk.split("_")[1]) for fn_unk in list_eval["fn_unk"]
+        ]  # start [s]
+
+        # 連続か判定する処理
+        is_continuous = True
+        for sec in list_eval[mask].sort_values("sec")["sec"].diff()[1:]:
+            if sec != 30.0:
+                is_continuous = False
+                break
+
+        if is_continuous:  # 連続であればwavファイル書き出し
+            # print(list_eval[mask].sort_values("sec")["sec"])
+            concat_wav(list_eval[mask].sort_values("sec")["fn_eval"], fn)
 
 
 if __name__ == "__main__":
