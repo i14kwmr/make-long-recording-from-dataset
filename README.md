@@ -1,5 +1,5 @@
 # make-long-recording-from-dataset
-データセットからメタ情報を使い，元の録音信号を作成する．
+[TUT Acoustic scenes 2016, Evaluation dataset](https://zenodo.org/record/165995#.YWVfeBDP0-Q)からメタ情報を使い，元の録音信号（3-5分）を作成する．
 
 ## Usage
 1. [本リポジトリ](https://github.com/i14kwmr/make-long-recording-from-dataset)をclone
